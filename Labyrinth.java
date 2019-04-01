@@ -33,23 +33,21 @@ public class Labyrinth {
 		try {
 			//br - short for BufferReader
 		    BufferedReader br = new BufferedReader(new FileReader(fileName));		
-			String line = br.readLine();
-			br.readLine();
-			String[] uncleanLine = {};
 			int currentLine = 2;
 			int currentVertex = 0;
 			int lineSeperator = 1;
 			int edgeDivider;
-			String[] widthHeight = line.split(" ");
+			String[] widthHeight = br.readLine().split(" ");
 			int width = Integer.parseInt(widthHeight[0]);
 			int height = Integer.parseInt(widthHeight[1]);
 			createLabyrinth(width*height);
+			br.readLine();
+			String[] uncleanLine = {};
 			while (currentLine++ < height*2+1) {
-				line = br.readLine();
+				uncleanLine = br.readLine().split("");
 				if(lineSeperator++ % 2 == 1) {
 					// we are reading a line containning vertices
 					edgeDivider = 2;
-					uncleanLine = line.split("");
 					while(edgeDivider < uncleanLine.length) {
 						if(uncleanLine[edgeDivider].equals(" ")) {
 							currentLabyrinth[currentVertex].addEdge(currentLabyrinth[currentVertex+1]);
@@ -62,7 +60,6 @@ public class Labyrinth {
 					// we are reading a line between vertices
 					edgeDivider = 1;
 					currentVertex = currentVertex - width;
-					uncleanLine = line.split("");
 					while(edgeDivider < uncleanLine.length) {
 						if(uncleanLine[edgeDivider].equals(" ")) {
 							currentLabyrinth[currentVertex].addEdge(currentLabyrinth[currentVertex+width]);
