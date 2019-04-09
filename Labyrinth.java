@@ -70,22 +70,9 @@ public class Labyrinth {
 					}
 				}
 			}
-			
-			/*
-			String[] cleanResults;
-			while ((line = br.readLine()) != null) {
-				if(!(line.equals(""))) {
-				    parts = line.split("[\\[\\]]");
-				    potentialEarnings.add(Arrays.stream(parts[1].split(", ")).mapToInt(Integer::parseInt).toArray());
-				    uncleanResults = parts[2].split(", ");
-				    cleanResults = Arrays.copyOfRange(uncleanResults, 1, uncleanResults.length);
-				    results.add(Arrays.stream(cleanResults).mapToInt(Integer::parseInt).toArray());
-				}
-			}
-			*/
 			br.close();
 		} catch (IOException e) {
-			System.out.println("hi4");
+			System.out.println("Filename not found!!!");
 		}
 	}
 	
