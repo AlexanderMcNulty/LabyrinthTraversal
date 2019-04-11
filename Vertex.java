@@ -1,13 +1,24 @@
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.awt.Color;
 import java.util.Iterator;
 
 public class Vertex {
-	private int value;
-	ArrayList<Vertex> edges;
+	private int index;
+	private String value;
+	private LinkedList<Vertex> edges;
+	private Color vColor;
+	private int distance;
+	private Vertex parent;
+	private int viewNumber;
 	
-	public Vertex(int value) {
-		this.value = value;
-		edges = new ArrayList<>();
+	public Vertex(int index) {
+		this.index = index;
+		value = " ";
+		edges = new LinkedList<>();
+		vColor = Color.WHITE;
+		distance = 0;
+		parent = null;
+		viewNumber = -99;
 	}
 	
 	public void addEdge(Vertex vertex) {
@@ -18,8 +29,55 @@ public class Vertex {
 		return edges.iterator();
 	}
 	
-	public int getValue() {
+	public int getIndex() {
+		return index;
+	}
+	
+	public Color getColor() {
+		return vColor;
+	}
+	
+	public void setColor(Color c) {
+		vColor = c;
+	}
+	
+	public void setDistance(int d) {
+		distance = d;
+	}
+	
+	public int getDistance() {
+		return distance;
+	}
+	
+	public Vertex getParent() {
+		return parent;
+	}
+	
+	public void setParent(Vertex v) {
+		parent = v;
+	}
+	
+	public String getValue() {
 		return value;
 	}
 	
+	public void setValue(String s) {
+		value = s;
+	}
+	
+	public void setViewNumber(int num) {
+		viewNumber = num;
+	}
+	
+	public int getViewNumber() {
+		return viewNumber;
+	}
+	
+	public void reset() {
+		value = " ";
+		vColor = Color.WHITE;
+		distance = 0;
+		parent = null;
+		viewNumber = -99;
+	}
 }
