@@ -39,20 +39,65 @@ public class Labyrinth {
 		System.out.println();
 	}
 	
-	public void readGraph(String fileName) {
-		try {
-			//br - short for BufferReader
-		    Scanner in = new Scanner(new File(fileName), "UTF-8");	
-		    in.nextLine();
-		    for(int i = 0; i < maze.length; i++) {
-		    	maze[i] = in.nextLine();
-		    }
-			in.close();
-		} 
-		catch (IOException e) {
-			System.out.println("hi4");
+	
+	public void generateMazeString() {
+        int length = (int)(Math.sqrt((double)(currentLabyrinth.length)));
+        maze = new String[2*length+1];
+        
+        int visitedCells = 0;
+        
+        //first line done
+        maze[0] = "+ +";
+        for(int i = 0; i < length-1; i++) {
+        	maze[0] += "-+";
+        }
+        
+        for(int j = 1; j < maze.length-1; j += 2) {
+        	maze[j] = "|";
+        	maze[j+1] = "+";
+        	for(int i = visitedCells; i < visitedCells+length; i++) {
+	        	Iterator<Vertex> iter = currentLabyrinth[i].getEdgeIterator();
+	        	boolean next = false;
+	        	boolean below = false;
+	        	while(iter.hasNext()) {
+	        		
+	        		Vertex v = iter.next();
+	        		if(v.getIndex() == i+1) {
+	        			next = true;
+	        		}
+	        		
+	        		if(v.getIndex() == i+length) {
+	        			below = true;
+	        		}
+	        			
+	        	}
+	        	
+	        	if(next == true) 
+	        		maze[j] += currentLabyrinth[i].getValue() +" ";
+	        	else
+	        		maze[j] += currentLabyrinth[i].getValue() +"|";
+	        	
+	        	if(i == length*length-1) {
+	        		below = true;
+	        	}
+	        	
+	        	if(below == true) 
+	        		maze[j+1] += " " + "+";
+	        	else
+	        		maze[j+1] += "-" +"+";    	
+	        		        		
+        	}
+        	visitedCells+=length;
+        }
+    }
+	
+	public void printMaze() {
+		generateMazeString();
+		for(String s : maze) {
+			System.out.println(s);
 		}
 	}
+	
 	
 	public void readLabyrinth(String fileName) {
 		try {
@@ -98,7 +143,7 @@ public class Labyrinth {
 			br.close();
 		} 
 		catch (IOException e) {
-			System.out.println("hi4");
+			System.out.println("file not found!!!!");
 		}
 	}
 	
@@ -144,7 +189,7 @@ public class Labyrinth {
 // 		}
 		
 // 		v.setColor(Color.BLACK);
-	}
+//	}
 	
 	public void bfs() {
 		resetAllVertices();
@@ -194,9 +239,13 @@ public class Labyrinth {
 			current = current.getParent(); //sets current to the parent of current
 		}
 		
+		current.setValue("#");
 		path.add(0,0); //adds the entrance to the ArrayList
 		
 		return path; //returns the shortest path to the exit 
 	}
+
+	
+
 }
 
