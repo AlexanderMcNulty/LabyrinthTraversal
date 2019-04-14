@@ -18,7 +18,7 @@ public class Vertex {
 		vColor = Color.WHITE;
 		distance = 0;
 		parent = null;
-		viewNumber = -99;
+		viewNumber = Integer.MIN_VALUE;
 	}
 	
 	public void addEdge(Vertex vertex) {
@@ -78,6 +78,7 @@ public class Vertex {
 		vColor = Color.WHITE;
 		distance = 0;
 		parent = null;
-		viewNumber = -99;
+		viewNumber = Integer.MIN_VALUE;
 	}
 }
+
