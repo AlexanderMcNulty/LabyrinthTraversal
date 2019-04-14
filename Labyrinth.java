@@ -7,8 +7,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
-import java.util.Scanner;
-import java.io.File;
 
 public class Labyrinth {
 	private Vertex[] currentLabyrinth;
@@ -151,43 +149,59 @@ public class Labyrinth {
 		}
 	}
 
-// 	public void dfs() {
-// 		resetAllVertices();
+ 	public void dfs() {
+ 		resetAllVertices(); //resets all of the vertices to their original state
 
-// 		dfsIterationNum = 0;
+ 		dfsIterationNum = 0; //sets the current iteration number to zero
+ 		currentLabyrinth[0].setDistance(0); //since all mazes start at zero we can set d to zero
+ 		dfsVisit(currentLabyrinth[0]); //we only need to start form the 0th vertex
+ 	}
 
-// //		for(int i = 0; i < currentLabyrinth.length; i++) {
-// //			if(currentLabyrinth[i].getColor().equals(Color.WHITE)) {
-// //				dfsVisit(currentLabyrinth[i]);
-// //			}
-// //		}
-// 		currentLabyrinth[0].setDistance(0);
-// 		dfsVisit(currentLabyrinth[0]);
-// 	}
+ 	public void dfsVisit(Vertex v) {
+ 		v.setColor(Color.GRAY); //set color of current vertex to grey
 
-// 	public void dfsVisit(Vertex v) {
-// 		v.setColor(Color.GRAY);
+ 		v.setViewNumber(dfsIterationNum); //sets the view number of the vertex
 
-// 		v.setViewNumber(dfsIterationNum);
+ 		if(dfsIterationNum == 9) //if iterationNum = 9 change it to zero
+ 			dfsIterationNum = 0;
+ 		else 
+ 			dfsIterationNum++; //else add 1 to it
+ 		
+ 		//Initialization of the vertex iterator
+ 		Iterator<Vertex> iter = v.getEdgeIterator();
 
-// 		if(dfsIterationNum == 9)
-// 			dfsIterationNum = 0;
-// 		else 
-// 			dfsIterationNum++;
+ 		while(iter.hasNext()) {
+ 			Vertex temp = iter.next(); //gets the next vertex in the LinkedList
+ 			if(temp.getColor().equals(Color.WHITE)) { //if the color of the vertex is white
+ 				temp.setParent(v); //sets the parent of the temporary vertex
+ 				temp.setDistance(v.getDistance() + 1); //sets the distance of the temporary vertex
+ 				dfsVisit(temp); //Recursive call of the of dfsVisit using the temp vertex
+ 			}
+ 		}
+ 		v.setColor(Color.BLACK); //sets the color of the current vertex to black
+	}
+ 	
+ 	public ArrayList<Integer> traceDFSBestPath(){
+ 		dfs();
+ 		// this will hold an ArrayList of integers that represent the path to take to
+ 		// complete the maze
+ 		ArrayList<Integer> path = new ArrayList<>();
+ 		// Instance of a vertex that keeps track of which vertex we are on
+ 		Vertex current = currentLabyrinth[currentLabyrinth.length - 1];
 
-// 		Iterator<Vertex> iter = v.getEdgeIterator();
+ 		// this will loop through all of the parents of the last vertex(the exit) until
+ 		// we hit the entrance
+ 		while (current.getParent() != null) { // exit if the vertex has no parent
+ 			current.setValue("#"); // set the value of the current vertex to # for printing later
+ 			path.add(0, current.getIndex()); // adds the current index to the start of the ArrayList
+ 			current = current.getParent(); // sets current to the parent of current
+ 		}
 
-// 		while(iter.hasNext()) {
-// 			Vertex temp = iter.next();
-// 			if(temp.getColor().equals(Color.WHITE)) {
-// 				temp.setParent(v);
-// 				temp.setDistance(v.getDistance() + 1);
-// 				dfsVisit(temp);
-// 			}
-// 		}
+ 		current.setValue("#");
+ 		path.add(0, 0); // adds the entrance to the ArrayList
 
-// 		v.setColor(Color.BLACK);
-//	}
+ 		return path; // returns the shortest path to the exit
+ 	}
 
 	public void bfs() {
 		resetAllVertices();
@@ -268,7 +282,6 @@ public class Labyrinth {
 					stack.remove(stack.size()-1);
 					currentCell = stack.get(stack.size()-1);
 				}
-				System.out.println(visitedCells + " " + currentCell.getIndex());
 			}
 		}
 	}
@@ -336,7 +349,3 @@ public class Labyrinth {
 		}
 	}
 }
-
-
-
-
