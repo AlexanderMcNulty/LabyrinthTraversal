@@ -71,9 +71,9 @@ public class Labyrinth {
 				}
 
 				if (next == true)
-					maze[j] += currentLabyrinth[i].getValue() + " ";
+					maze[j] += currentLabyrinth[i].getViewNumber() + " ";
 				else
-					maze[j] += currentLabyrinth[i].getValue() + "|";
+					maze[j] += currentLabyrinth[i].getViewNumber() + "|";
 
 				if (i == length * length - 1) {
 					below = true;
@@ -268,7 +268,7 @@ public class Labyrinth {
         Vertex newNeighbor;
 		Random rand = new Random(); 
 		int visitedCells = 1;
-		while(visitedCells < length*length-1) {
+		while(visitedCells < length*length) {
 			potentialNeighbors = getPotentialNeighbors(length, currentCell.getIndex());
 			if(potentialNeighbors.size() > 0) {
 				newNeighbor = potentialNeighbors.get(rand.nextInt(potentialNeighbors.size()));
@@ -279,8 +279,8 @@ public class Labyrinth {
 				visitedCells++;
 			} else {
 				if(stack.size() > 0) {
-					stack.remove(stack.size()-1);
 					currentCell = stack.get(stack.size()-1);
+					stack.remove(stack.size()-1);
 				}
 			}
 		}
