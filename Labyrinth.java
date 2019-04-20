@@ -12,21 +12,14 @@ import java.io.File;
 
 public class Labyrinth {
 	private Vertex[] currentLabyrinth;
-	private String[] maze;
+	private String[] textLabyrinth;
 	private int dfsIterationNum;
-
-	public Labyrinth() {
-	}
 
 	public void createLabyrinth(int size) {
 		currentLabyrinth = new Vertex[size];
 		for (int i = 0; i < size; i++) {
 			currentLabyrinth[i] = new Vertex(i);
 		}
-	}
-
-	public void createMaze(int height) {
-		maze = new String[height];
 	}
 
 	public void printLabyrinthGraph() {
@@ -40,21 +33,21 @@ public class Labyrinth {
 		System.out.println();
 	}
 
-	public void generateMazeString() {
+	public void generateLabyrinthString() {
 		int length = (int) (Math.sqrt((double) (currentLabyrinth.length)));
-		maze = new String[2 * length + 1];
+		textLabyrinth = new String[2 * length + 1];
 
 		int visitedCells = 0;
 
 		// first line done
-		maze[0] = "+ +";
+		textLabyrinth[0] = "+ +";
 		for (int i = 0; i < length - 1; i++) {
-			maze[0] += "-+";
+			textLabyrinth[0] += "-+";
 		}
 
-		for (int j = 1; j < maze.length - 1; j += 2) {
-			maze[j] = "|";
-			maze[j + 1] = "+";
+		for (int j = 1; j < textLabyrinth.length - 1; j += 2) {
+			textLabyrinth[j] = "|";
+			textLabyrinth[j + 1] = "+";
 			for (int i = visitedCells; i < visitedCells + length; i++) {
 				Iterator<Vertex> iter = currentLabyrinth[i].getEdgeIterator();
 				boolean next = false;
@@ -73,35 +66,36 @@ public class Labyrinth {
 				}
 
 				if (next == true)
-					maze[j] += currentLabyrinth[i].getViewNumber() + " ";
+					textLabyrinth[j] += currentLabyrinth[i].getViewNumber() + " ";
 				else
-					maze[j] += currentLabyrinth[i].getViewNumber() + "|";
+					textLabyrinth[j] += currentLabyrinth[i].getViewNumber() + "|";
 
 				if (i == length * length - 1) {
 					below = true;
 				}
 
 				if (below == true)
-					maze[j + 1] += " " + "+";
+					textLabyrinth[j + 1] += " " + "+";
 				else
-					maze[j + 1] += "-" + "+";
+					textLabyrinth[j + 1] += "-" + "+";
 
 			}
 			visitedCells += length;
 		}
 	}
 
-	public void printMaze() {
-		generateMazeString();
-		for (String s : maze) {
+	public void printLabyrinth() {
+		generateLabyrinthString();
+		for (String s : textLabyrinth) {
 			System.out.println(s);
 		}
+		System.out.println();
 	}
 	
 	/**
 	 * readLabyrinth reads and save to memory the text files containning square labyrinths
 	 * the labyrinth text file is converted to a arrayList implementation of a graph
-	 * @param String - the name of the file which holds a maze we would like to load
+	 * @param String - the name of the file which holds a labyrinth we would like to load
 	 */
 	public void readLabyrinth(String fileName) {
 		try {
@@ -164,7 +158,7 @@ public class Labyrinth {
  		resetAllVertices(); //resets all of the vertices to their original state
 
  		dfsIterationNum = 0; //sets the current iteration number to zero
- 		currentLabyrinth[0].setDistance(0); //since all mazes start at zero we can set d to zero
+ 		currentLabyrinth[0].setDistance(0); //since all labyrinths start at zero we can set d to zero
  		dfsVisit(currentLabyrinth[0]); //we only need to start form the 0th vertex
  	}
 
@@ -195,7 +189,7 @@ public class Labyrinth {
  	public ArrayList<Integer> traceDFSBestPath(){
  		dfs();
  		// this will hold an ArrayList of integers that represent the path to take to
- 		// complete the maze
+ 		// complete the labyrinth
  		ArrayList<Integer> path = new ArrayList<>();
  		// Instance of a vertex that keeps track of which vertex we are on
  		Vertex current = currentLabyrinth[currentLabyrinth.length - 1];
@@ -252,7 +246,7 @@ public class Labyrinth {
 				// connected vertex
 
 		// this will hold an ArrayList of integers that represent the path to take to
-		// complete the maze
+		// complete the labyrinth
 		ArrayList<Integer> path = new ArrayList<>();
 		// Instance of a vertex that keeps track of which vertex we are on
 		Vertex current = currentLabyrinth[currentLabyrinth.length - 1];
@@ -273,11 +267,11 @@ public class Labyrinth {
 
 	
 	/**
-	 * GenerateMaze - this function is used to randomly generate square labyrinth with an ArrayList implementation
+	 * GenerateLabyrinth - this function is used to randomly generate square labyrinth with an ArrayList implementation
 	 * of the a labyrinth this function relies on two helper function getPotentialNeighbors and potentially add
 	 * @param length - the length of one side of the square labyrinth
 	 */
-	public void GenerateMaze(int length) {
+	public void GenerateLabyrinth(int length) {
 		createLabyrinth(length*length);
 		
 		// potentialNeighbors - this array holds all vertices ajacent to the currentCell which are not connected to the graph 
@@ -374,3 +368,4 @@ public class Labyrinth {
 	}
 
 }
+
