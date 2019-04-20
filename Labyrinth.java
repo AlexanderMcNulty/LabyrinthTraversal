@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
+import java.util.Scanner;
+import java.io.File;
 
 public class Labyrinth {
 	private Vertex[] currentLabyrinth;
@@ -95,14 +97,23 @@ public class Labyrinth {
 			System.out.println(s);
 		}
 	}
-
+	
+	/**
+	 * readLabyrinth reads and save to memory the text files containning square labyrinths
+	 * the labyrinth text file is converted to a arrayList implementation of a graph
+	 * @param String - the name of the file which holds a maze we would like to load
+	 */
 	public void readLabyrinth(String fileName) {
 		try {
-			// br - short for BufferReader
+			// br - short for BufferReader, used bring lines of the text file into the program to be processed
 			BufferedReader br = new BufferedReader(new FileReader(fileName));
+			// currentLine - the line in the Labyrinth which is currently being interpreted
 			int currentLine = 2;
+			// currentVertex - the Vertex in the labyrinth which is currently being populated
 			int currentVertex = 0;
+			// lineSeperator - used to evaluate whether the line contains horizontal or verticle edges 
 			int lineSeperator = 1;
+			// edgeDivider - edge divider is used to evaluate whether there is an edge between two vertices
 			int edgeDivider;
 			String[] widthHeight = br.readLine().split(" ");
 			int width = Integer.parseInt(widthHeight[0]);
@@ -113,7 +124,7 @@ public class Labyrinth {
 			while (currentLine++ < height * 2 + 1) {
 				uncleanLine = br.readLine().split("");
 				if (lineSeperator++ % 2 == 1) {
-					// we are reading a line containing vertices
+					// we are reading a line containing Horizontal edges
 					edgeDivider = 2;
 					while (edgeDivider < uncleanLine.length) {
 						if (uncleanLine[edgeDivider].equals(" ")) {
@@ -124,7 +135,7 @@ public class Labyrinth {
 						currentVertex++;
 					}
 				} else {
-					// we are reading a line between vertices
+					// we are reading a line containning Vertical edges
 					edgeDivider = 1;
 					currentVertex = currentVertex - width;
 					while (edgeDivider < uncleanLine.length) {
@@ -139,7 +150,7 @@ public class Labyrinth {
 			}
 			br.close();
 		} catch (IOException e) {
-			System.out.println("hi4");
+			System.out.println("The filename given was not found!!!");
 		}
 	}
 
@@ -149,7 +160,7 @@ public class Labyrinth {
 		}
 	}
 
- 	public void dfs() {
+	public void dfs() {
  		resetAllVertices(); //resets all of the vertices to their original state
 
  		dfsIterationNum = 0; //sets the current iteration number to zero
@@ -260,14 +271,28 @@ public class Labyrinth {
 		return path; // returns the shortest path to the exit
 	}
 
+	
+	/**
+	 * GenerateMaze - this function is used to randomly generate square labyrinth with an ArrayList implementation
+	 * of the a labyrinth this function relies on two helper function getPotentialNeighbors and potentially add
+	 * @param length - the length of one side of the square labyrinth
+	 */
 	public void GenerateMaze(int length) {
 		createLabyrinth(length*length);
+		
+		// potentialNeighbors - this array holds all vertices ajacent to the currentCell which are not connected to the graph 
 		ArrayList<Vertex> potentialNeighbors;
+		// stack - an arraylist reappropriated to be used a stack holding cells are connected to root
 		ArrayList<Vertex> stack = new ArrayList<>();
+		// currentCell - the vertex which may be connected to an vertex not currently attached to the graph 
 		Vertex currentCell = currentLabyrinth[0];
+		// newNeighbor - the vertex which has been selected to be connected to current cell
         Vertex newNeighbor;
+        // rand - an instance of the Random class used to generate an integer for selecting vertex to be the neighbor of currentCell
 		Random rand = new Random(); 
+        // visitedCells - the number of cells which have been assigned to currentCell and thus connected to root
 		int visitedCells = 1;
+		
 		while(visitedCells < length*length) {
 			potentialNeighbors = getPotentialNeighbors(length, currentCell.getIndex());
 			if(potentialNeighbors.size() > 0) {
@@ -331,9 +356,7 @@ public class Labyrinth {
 			potentiallyAdd(currentLabyrinth[index - 1], potentialNeighbors);
 			potentiallyAdd(currentLabyrinth[index + 1], potentialNeighbors);
 			potentiallyAdd(currentLabyrinth[index - length], potentialNeighbors);
-		} 
-		// for all over cells
-		else {
+		} else {
 			potentiallyAdd(currentLabyrinth[index - 1], potentialNeighbors);
 			potentiallyAdd(currentLabyrinth[index + 1], potentialNeighbors);
 			potentiallyAdd(currentLabyrinth[index - length], potentialNeighbors);
@@ -343,9 +366,11 @@ public class Labyrinth {
 	}
 	
 	public void potentiallyAdd(Vertex cur, ArrayList<Vertex> potentialNeighbors) {
+		// iter -  an iterator which has holds the neighbors a cell we would like to potentially connect to currentCell
 		Iterator<Vertex> iter = cur.getEdgeIterator();
 		if(!(iter.hasNext())) {
 			potentialNeighbors.add(cur);
 		}
 	}
+
 }
