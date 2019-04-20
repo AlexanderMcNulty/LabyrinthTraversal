@@ -52,7 +52,7 @@ public class LabyrinthTest {
 		String fileName = "maze10.txt";
 		testSubject.readLabyrinth(fileName);	
 		testSubject.traceDFSBestPath();
-		testSubject.printLabyrinth();
+		testSubject.printLabyrinthText();
 	}
 	
 	@Test
@@ -63,7 +63,7 @@ public class LabyrinthTest {
 		testSubject=createTestSubject();
 		testSubject.GenerateLabyrinth(length);
 		testSubject.traceDFSBestPath();
-		testSubject.printLabyrinth();
+		testSubject.printLabyrinthText();
 	}
 	
 	
