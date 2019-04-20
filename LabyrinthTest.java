@@ -2,8 +2,9 @@
 import javax.annotation.Generated;
 
 import org.junit.Test;
+import java.util.*;
+import org.junit.Assert;
 
-@Generated(value = "org.junit-tools-1.1.0")
 public class LabyrinthTest {
 
 	private Labyrinth createTestSubject() {
@@ -36,24 +37,34 @@ public class LabyrinthTest {
 
 		// default test
 		testSubject = createTestSubject();
-		String fileName = "maze20.txt";
+		String fileName = "maze10.txt";
 		testSubject.readLabyrinth(fileName);		
-		//testSubject.printLabyrinthGraph();
-		
-		testSubject.traceDFSBestPath();
-		testSubject.generateMazeString();
-		testSubject.printMaze();
-		
-		System.out.println();
-		
-		testSubject.traceBFSBestPath();
-		testSubject.generateMazeString();
-		testSubject.printMaze();
-		
-//		testSubject.GenerateMaze(5);
-//		testSubject.traceBFSBestPath();
-//		testSubject.generateMazeString();
-//		testSubject.printMaze();
-		
+		testSubject.printLabyrinthGraph();
+		//for(int i = 0; i < testSubject.traceDFSBestPath().size(); i++) {
+          //  System.out.println(testSubject.traceDFSBestPath().get(i));
+        //}
 	}
+
+	@Test
+	public void testPrintLabyrinth() throws Exception {
+		Labyrinth testSubject;
+		testSubject = createTestSubject();
+		String fileName = "maze10.txt";
+		testSubject.readLabyrinth(fileName);	
+		testSubject.traceDFSBestPath();
+		testSubject.printLabyrinth();
+	}
+	
+	@Test
+	public void testGenerateLabyrinth() throws Exception {
+		Labyrinth testSubject;
+		int length = 10;
+		// default test
+		testSubject=createTestSubject();
+		testSubject.GenerateLabyrinth(length);
+		testSubject.traceDFSBestPath();
+		testSubject.printLabyrinth();
+	}
+	
+	
 }
