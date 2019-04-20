@@ -11,10 +11,14 @@ import java.util.Scanner;
 import java.io.File;
 
 public class Labyrinth {
+	// currentLabyrinth - an arraylist implementation of a graph
 	private Vertex[] currentLabyrinth;
+	// textLabyrinth - an array of Strings which depict the currentLabyrinth
 	private String[] textLabyrinth;
+	// dfsIterationNum - holds the current iteration number for a DFS traversal
 	private int dfsIterationNum;
 
+	// createLabyrinth - create an empty graph
 	public void createLabyrinth(int size) {
 		currentLabyrinth = new Vertex[size];
 		for (int i = 0; i < size; i++) {
@@ -22,6 +26,7 @@ public class Labyrinth {
 		}
 	}
 
+	// printLabyrinthGraph - prints the arrayList depicition of currentLabyrinth
 	public void printLabyrinthGraph() {
 		for (Vertex vertex : currentLabyrinth) {
 			System.out.print("\n" + vertex.getIndex() + " -> ");
@@ -33,18 +38,18 @@ public class Labyrinth {
 		System.out.println();
 	}
 
+	// generateLabyrinthString - generate a visual representation (with strings) of the Labyrinth
+	// this function assumes the Labyrinth is square
 	public void generateLabyrinthString() {
+		// length - the length of one side of currentLabyrinth
 		int length = (int) (Math.sqrt((double) (currentLabyrinth.length)));
-		textLabyrinth = new String[2 * length + 1];
-
+		// visitedCells - the number of cells visited
 		int visitedCells = 0;
-
-		// first line done
+		textLabyrinth = new String[2 * length + 1];
 		textLabyrinth[0] = "+ +";
 		for (int i = 0; i < length - 1; i++) {
 			textLabyrinth[0] += "-+";
 		}
-
 		for (int j = 1; j < textLabyrinth.length - 1; j += 2) {
 			textLabyrinth[j] = "|";
 			textLabyrinth[j + 1] = "+";
@@ -53,27 +58,21 @@ public class Labyrinth {
 				boolean next = false;
 				boolean below = false;
 				while (iter.hasNext()) {
-
 					Vertex v = iter.next();
 					if (v.getIndex() == i + 1) {
 						next = true;
 					}
-
 					if (v.getIndex() == i + length) {
 						below = true;
 					}
-
 				}
-
 				if (next == true)
 					textLabyrinth[j] += currentLabyrinth[i].getViewNumber() + " ";
 				else
 					textLabyrinth[j] += currentLabyrinth[i].getViewNumber() + "|";
-
 				if (i == length * length - 1) {
 					below = true;
 				}
-
 				if (below == true)
 					textLabyrinth[j + 1] += " " + "+";
 				else
@@ -84,7 +83,8 @@ public class Labyrinth {
 		}
 	}
 
-	public void printLabyrinth() {
+	// printLabyrinth - prints a visual representation of the current graph
+	public void printLabyrinthText() {
 		generateLabyrinthString();
 		for (String s : textLabyrinth) {
 			System.out.println(s);
@@ -147,7 +147,8 @@ public class Labyrinth {
 			System.out.println("The filename given was not found!!!");
 		}
 	}
-
+	
+	// resetAllVertices - sets the default values of all instances of Vertex in currentLabyrinth
 	public void resetAllVertices() {
 		for (int i = 0; i < currentLabyrinth.length; i++) {
 			currentLabyrinth[i].reset();
@@ -368,4 +369,8 @@ public class Labyrinth {
 	}
 
 }
+
+
+
+
 
