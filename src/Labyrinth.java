@@ -335,7 +335,7 @@ public class Labyrinth {
 		// newNeighbor - the vertex which has been selected to be connected to current cell
         Vertex newNeighbor;
         // rand - an instance of the Random class used to generate an integer for selecting vertex to be the neighbor of currentCell
-		Random rand = new Random(); 
+		Random rand = new Random(1); 
         // visitedCells - the number of cells which have been assigned to currentCell and thus connected to root
 		int visitedCells = 1;
 		
