@@ -7,8 +7,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
-import java.util.Scanner;
-import java.io.File;
 
 public class Labyrinth {
 	// currentLabyrinth - an arraylist implementation of a graph
@@ -17,6 +15,12 @@ public class Labyrinth {
 	private String[] textLabyrinth;
 	// dfsIterationNum - holds the current iteration number for a DFS traversal
 	private int dfsIterationNum;
+	//number of cells visited per search method
+	private int visitedCells;
+	
+	public int getVisitedCells() {
+		return visitedCells;
+	}
 
 	// createLabyrinth - create an empty graph
 	public void createLabyrinth(int size) {
@@ -24,6 +28,10 @@ public class Labyrinth {
 		for (int i = 0; i < size; i++) {
 			currentLabyrinth[i] = new Vertex(i);
 		}
+	}
+	
+	public double getLabyrinthLength() {
+		return Math.sqrt((double)(currentLabyrinth.length));
 	}
 
 	// printLabyrinthGraph - prints the arrayList depicition of currentLabyrinth
@@ -40,7 +48,7 @@ public class Labyrinth {
 
 	// generateLabyrinthString - generate a visual representation (with strings) of the Labyrinth
 	// this function assumes the Labyrinth is square
-	public void generateLabyrinthString() {
+	public void generateLabyrinthString(boolean viewNumber) {
 		// length - the length of one side of currentLabyrinth
 		int length = (int) (Math.sqrt((double) (currentLabyrinth.length)));
 		// visitedCells - the number of cells visited
@@ -66,13 +74,30 @@ public class Labyrinth {
 						below = true;
 					}
 				}
-				if (next == true)
-					textLabyrinth[j] += currentLabyrinth[i].getViewNumber() + " ";
-				else
-					textLabyrinth[j] += currentLabyrinth[i].getViewNumber() + "|";
-				if (i == length * length - 1) {
-					below = true;
+				if(viewNumber == true) {
+					if (next == true) {
+						if(currentLabyrinth[i].getViewNumber() == Integer.MIN_VALUE)
+							textLabyrinth[j] += " " + " ";
+						else
+							textLabyrinth[j] += currentLabyrinth[i].getViewNumber() + " ";
+					}
+					else {
+						if(currentLabyrinth[i].getViewNumber() == Integer.MIN_VALUE)
+							textLabyrinth[j] += " " + "|";
+						else
+							textLabyrinth[j] += currentLabyrinth[i].getViewNumber() + "|";
+					}
 				}
+				else {
+					if (next == true) 
+							textLabyrinth[j] += currentLabyrinth[i].getValue() + " ";
+					else 
+							textLabyrinth[j] += currentLabyrinth[i].getValue() + "|";
+				}
+				
+				if (i == length * length - 1) 
+					below = true;
+					
 				if (below == true)
 					textLabyrinth[j + 1] += " " + "+";
 				else
@@ -84,8 +109,8 @@ public class Labyrinth {
 	}
 
 	// printLabyrinth - prints a visual representation of the current graph
-	public void printLabyrinthText() {
-		generateLabyrinthString();
+	public void printLabyrinthText(boolean viewNumber) {
+		generateLabyrinthString(viewNumber);
 		for (String s : textLabyrinth) {
 			System.out.println(s);
 		}
@@ -157,7 +182,8 @@ public class Labyrinth {
 
 	public void dfs() {
  		resetAllVertices(); //resets all of the vertices to their original state
-
+ 		
+ 		visitedCells = 0;
  		dfsIterationNum = 0; //sets the current iteration number to zero
  		currentLabyrinth[0].setDistance(0); //since all labyrinths start at zero we can set d to zero
  		dfsVisit(currentLabyrinth[0]); //we only need to start form the 0th vertex
@@ -165,7 +191,7 @@ public class Labyrinth {
 
  	public void dfsVisit(Vertex v) {
  		v.setColor(Color.GRAY); //set color of current vertex to grey
-
+ 		visitedCells++;
  		v.setViewNumber(dfsIterationNum); //sets the view number of the vertex
 
  		if(dfsIterationNum == 9) //if iterationNum = 9 change it to zero
@@ -175,16 +201,18 @@ public class Labyrinth {
  		
  		//Initialization of the vertex iterator
  		Iterator<Vertex> iter = v.getEdgeIterator();
-
- 		while(iter.hasNext()) {
- 			Vertex temp = iter.next(); //gets the next vertex in the LinkedList
- 			if(temp.getColor().equals(Color.WHITE)) { //if the color of the vertex is white
- 				temp.setParent(v); //sets the parent of the temporary vertex
- 				temp.setDistance(v.getDistance() + 1); //sets the distance of the temporary vertex
- 				dfsVisit(temp); //Recursive call of the of dfsVisit using the temp vertex
- 			}
+ 		
+ 		if(v.getIndex() != currentLabyrinth.length -1) {
+	 		while(iter.hasNext()) {
+	 			Vertex temp = iter.next(); //gets the next vertex in the LinkedList
+	 			if(temp.getColor().equals(Color.WHITE)) { //if the color of the vertex is white
+	 				temp.setParent(v); //sets the parent of the temporary vertex
+	 				temp.setDistance(v.getDistance() + 1); //sets the distance of the temporary vertex
+	 				dfsVisit(temp); //Recursive call of the of dfsVisit using the temp vertex
+	 			}
+	 		}
+	 		v.setColor(Color.BLACK); //sets the color of the current vertex to black
  		}
- 		v.setColor(Color.BLACK); //sets the color of the current vertex to black
 	}
  	
  	public ArrayList<Integer> traceDFSBestPath(){
@@ -211,7 +239,8 @@ public class Labyrinth {
 
 	public void bfs() {
 		resetAllVertices();
-
+		boolean atLast = false;
+		visitedCells = 0;
 		Queue<Vertex> queue = new LinkedList<>(); // initializes the queue
 		queue.add(currentLabyrinth[0]); // adds the first vertex to the queue
 		int counter = 0;// what step we are on
@@ -219,14 +248,17 @@ public class Labyrinth {
 		while (queue.size() != 0) {
 
 			Vertex u = queue.remove(); // removes the vertex but stores it in u
-
+			visitedCells ++;
 			u.setViewNumber(counter);
 
 			if (counter == 9)
 				counter = 0;
 			else
 				counter++;
-
+			
+			if(u.getIndex() == currentLabyrinth.length -1)
+				break;
+			
 			Iterator<Vertex> iter = u.getEdgeIterator();
 			while (iter.hasNext()) {
 				Vertex temp = iter.next();
@@ -236,6 +268,7 @@ public class Labyrinth {
 					temp.setParent(u); // sets the parent of the vertex
 					queue.add(temp);
 				}
+				
 			}
 			u.setColor(Color.BLACK); // set the color of u to black as all of its edges have been discovered
 		}
@@ -367,25 +400,4 @@ public class Labyrinth {
 			potentialNeighbors.add(cur);
 		}
 	}
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
