@@ -1,4 +1,3 @@
-
 import javax.annotation.Generated;
 
 import org.junit.Test;
@@ -30,41 +29,60 @@ public class LabyrinthTest {
 		testSubject = createTestSubject();
 		testSubject.createLabyrinth(size);
 	}
-
-	@Test
-	public void testPrintLabyrinthGraph() throws Exception {
-		Labyrinth testSubject;
-
-		// default test
-		testSubject = createTestSubject();
-		String fileName = "maze10.txt";
-		testSubject.readLabyrinth(fileName);		
-		testSubject.printLabyrinthGraph();
-		//for(int i = 0; i < testSubject.traceDFSBestPath().size(); i++) {
-          //  System.out.println(testSubject.traceDFSBestPath().get(i));
-        //}
-	}
-
-	@Test
-	public void testPrintLabyrinth() throws Exception {
-		Labyrinth testSubject;
-		testSubject = createTestSubject();
-		String fileName = "maze10.txt";
-		testSubject.readLabyrinth(fileName);	
-		testSubject.traceDFSBestPath();
-		testSubject.printLabyrinthText();
-	}
 	
 	@Test
-	public void testGenerateLabyrinth() throws Exception {
+	public void testProfessorTest() throws Exception{
 		Labyrinth testSubject;
-		int length = 10;
-		// default test
 		testSubject=createTestSubject();
-		testSubject.GenerateLabyrinth(length);
-		testSubject.traceDFSBestPath();
-		testSubject.printLabyrinthText();
-	}
 	
+		String[] fileNames =  {"maze10.txt", "maze20.txt", "maze4.txt", "maze6.txt", "maze8.txt", "maze2.txt"};
+		
+		
+		for(String s: fileNames) {
+			testSubject.readLabyrinth(s);
+			testSubject.printLabyrinthText(true);
+			
+			System.out.println("Professor Test (" + testSubject.getLabyrinthLength() + " " + testSubject.getLabyrinthLength() + ")");
+			System.out.println("Depth First Search");
+			
+			ArrayList<Integer> path = testSubject.traceDFSBestPath();
+			
+			System.out.println("The order by which all of the vertices were found(BFS):");
+			testSubject.printLabyrinthText(true);
+			
+			System.out.println("The best path to finish the maze(DFS):");
+			testSubject.printLabyrinthText(false);
+			
+			System.out.print("Path(DFS):");
+			for(int i = 0; i < path.size(); i++) {
+				System.out.print(path.get(i) + ",");
+			}
+			System.out.println();
+			System.out.println("Length of Path: " + path.size());
+			System.out.println("Visited Cells: " + testSubject.getVisitedCells());
+			System.out.println();
+			
+			
+			
+			System.out.println("Breadth First Search");
+			path = testSubject.traceBFSBestPath();
+			
+			System.out.println("The order by which all of the vertices were found(BFS):");
+			testSubject.printLabyrinthText(true);
+			
+			System.out.println("The best path to finish the maze(BFS):");
+			testSubject.printLabyrinthText(false);
+			
+			System.out.print("Path(BFS): ");
+			for(int i = 0; i < path.size(); i++) {
+				System.out.print(path.get(i) + ",");
+			}
+			System.out.println();
+			System.out.println("Length of Path: " + path.size());
+			System.out.println("Visited Cells: " + testSubject.getVisitedCells());
+			System.out.println();
+		}
+		
+	}
 	
 }
