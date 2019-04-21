@@ -1,0 +1,45 @@
++ +-+
+|   |
++-+ +
+|   |
++-+ +
+
+Test File (2.0 2.0)
+Depth First Search
+The order by which all of the vertices were found(BFS):
++ +-+
+|0 1|
++-+ +
+|  2|
++-+ +
+
+The best path to finish the maze(DFS):
++ +-+
+|# #|
++-+ +
+|  #|
++-+ +
+
+
+Length of Path: 3
+Visited Cells: 3
+
+Breadth First Search
+The order by which all of the vertices were found(BFS):
++ +-+
+|0 1|
++-+ +
+|  2|
++-+ +
+
+The best path to finish the maze(BFS):
++ +-+
+|# #|
++-+ +
+|  #|
++-+ +
+
+
+Length of Path: 3
+Visited Cells: 3
+
